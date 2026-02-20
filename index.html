@@ -15,157 +15,153 @@
 
     <style>
         :root { --p-pink: #F5E6F5; --a-pink: #EDD3E7; }
-        body { margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; background: transparent; overflow-x: hidden; }
-        
-        /* INTRO STRIP */
+        body { margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; background: transparent; overflow-x: hidden; font-family: 'Babydoll', sans-serif; }
+
+        /* INTRO BUTTON */
         #intro-btn { 
-            cursor: pointer; width: 450px; height: 75px; 
-            background: url('https://i.pinimg.com/736x/ff/d3/71/ffd371f5687960d2338380194f3adefc.jpg') no-repeat center/contain;
-            display: flex; justify-content: center; align-items: center;
-            color: white; font-family: 'Gluten'; font-size: 22px;
-            transition: transform 0.2s;
+            cursor: pointer; width: 380px; height: 70px; background: var(--a-pink); border-radius: 40px;
+            display: flex; justify-content: center; align-items: center; color: white;
+            font-family: 'Gluten'; font-size: 22px; font-weight: bold; border: 4px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s;
         }
-        #intro-btn:hover { transform: scale(1.05); }
+        #intro-btn:hover { transform: scale(1.03); }
 
         /* ENVELOPE & SEAL */
-        #envelope { display: none; width: 300px; margin-top: 20px; text-align: center; }
-        .seal { width: 100px; cursor: pointer; transition: 0.3s; }
-        .bounce { animation: bounce 1s infinite; }
+        #envelope-area { display: none; text-align: center; margin-top: 20px; }
+        .seal-bow { width: 120px; cursor: pointer; transition: 0.3s; animation: bounce 1s infinite; }
 
         /* THE PAGE */
-        #page-wrapper { display: none; width: 400px; position: relative; }
-        #page-bg { 
-            width: 100%; min-height: 550px; 
-            background: url('https://i.pinimg.com/1200x/0c/83/93/0c839340ccbd8c5f89d9c09a555ae67c.jpg') center/cover;
-            padding: 90px 50px; box-sizing: border-box; position: relative;
+        #page-wrapper { display: none; width: 420px; position: relative; }
+        #page-img { 
+            width: 100%; min-height: 550px; background: url('https://media.discordapp.net/attachments/895431804650131457/1474226812920791163/0c839340ccbd8c5f89d9c09a555ae67c-removebg-preview.png') no-repeat center/contain;
+            padding: 100px 60px; box-sizing: border-box; position: relative;
         }
-        .page-input { 
-            background: transparent; border: none; outline: none; font-family: 'Babydoll'; 
-            font-size: 18px; width: 100%; min-height: 350px; resize: none; line-height: 1.6;
-        }
+        .page-input { background: transparent; border: none; outline: none; font-family: 'Babydoll'; width: 100%; height: 350px; resize: none; line-height: 1.6; }
+        .bullet-gif { width: 35px; position: absolute; left: 20px; top: 100px; cursor: pointer; }
 
-        /* BULLET & ICONS */
-        .bullet { width: 30px; cursor: pointer; position: absolute; left: 15px; top: 95px; }
-        #lover { position: absolute; top: 15px; right: 20px; width: 50px; cursor: pointer; transition: 0.3s; }
-        #speech-bubble { 
-            display: none; position: absolute; top: 10px; right: 80px; background: white; 
-            padding: 8px 12px; border-radius: 15px; font-size: 14px; font-family: 'Playpen Sans';
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); color: var(--a-pink);
-        }
+        /* LOVER & HELPER */
+        #lover { position: absolute; top: 20px; right: 30px; width: 45px; cursor: pointer; }
+        #speech-bubble { display: none; position: absolute; top: 10px; right: 85px; background: white; padding: 5px 10px; border-radius: 12px; font-family: 'Playpen Sans'; font-size: 14px; border: 2px solid var(--a-pink); }
+        #helper { display: none; position: fixed; right: 10px; bottom: 80px; width: 90px; cursor: pointer; }
+        #helper-menu { display: none; position: fixed; right: 100px; bottom: 80px; width: 180px; background: url('https://media.discordapp.net/attachments/895431804650131457/1474227573591642112/image-removebg-preview_18.png') no-repeat center/contain; padding: 20px; text-align: center; }
+        
+        .menu-btn { background: rgba(255,255,255,0.5); border: none; border-radius: 15px; margin: 5px; padding: 8px; font-family: 'Playpen Sans'; cursor: pointer; width: 90%; color: var(--a-pink); }
 
         /* PASSWORD SYSTEM */
-        #pass-screen { display: none; text-align: center; z-index: 100; }
-        .pass-bg { 
-            width: 400px; height: 450px; background: url('https://i.pinimg.com/736x/55/8f/89/558f89fbd04ac675c094ed2808ab78d2.jpg') no-repeat center/contain;
-            position: relative; 
-        }
-        .pass-box { 
-            position: absolute; top: 95px; left: 50%; transform: translateX(-50%); width: 230px; height: 310px;
-            background: url('https://i.pinimg.com/736x/dd/a1/98/dda198020305d044b4fe3efed1454aad.jpg') no-repeat center/contain;
-        }
-        .grid { position: absolute; top: 100px; left: 30px; display: grid; grid-template-columns: repeat(3, 58px); grid-template-rows: repeat(4, 48px); }
-        .key { width: 50px; height: 45px; cursor: pointer; }
+        #pass-screen { display: none; text-align: center; }
+        .pass-menu-png { width: 400px; height: 450px; background: url('https://media.discordapp.net/attachments/895431804650131457/1474227849413132368/image-removebg-preview_19.png') no-repeat center/contain; position: relative; }
+        .pass-box-png { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); width: 250px; height: 300px; background: url('https://media.discordapp.net/attachments/895431804650131457/1474228072709492846/image-removebg-preview_20.png') no-repeat center/contain; }
+        .hotspot-grid { position: absolute; top: 90px; left: 35px; display: grid; grid-template-columns: repeat(3, 60px); grid-template-rows: repeat(4, 50px); }
+        .key { width: 55px; height: 45px; cursor: pointer; }
 
-        /* COOKIES */
-        .cookies { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
-        .cookie { font-size: 35px; filter: sepia(1); transition: 0.5s; }
+        .cookie-tray { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+        .cookie { font-size: 30px; filter: sepia(1); transition: 0.5s; }
         .frosted { filter: hue-rotate(300deg) saturate(2); }
-        .burnt { filter: brightness(0); transform: scale(0.85); }
+        .burnt { filter: brightness(0); transform: scale(0.8); }
 
-        #jumpscare { display: none; position: fixed; inset: 0; background: black; z-index: 1000; justify-content: center; align-items: center; }
-
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        /* JUMPSCARE */
+        #jumpscare { display: none; position: fixed; inset: 0; background: black; z-index: 9999; justify-content: center; align-items: center; }
+        
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
 
-    <div id="player1"></div><div id="player2"></div>
+    <div id="p1"></div><div id="p2"></div>
 
-    <div id="intro-btn" onclick="startIntro()">Ready to make a change?</div>
+    <div id="intro-btn" onclick="startFlow()">Ready to make a change?</div>
 
-    <div id="envelope">
-        <img src="https://i.pinimg.com/1200x/4c/80/77/4c807778ddfbcebbd3520f9b21b5c21a.jpg" class="seal bounce" onclick="openLetter()">
+    <div id="envelope-area">
+        <img src="https://media.discordapp.net/attachments/895431804650131457/1474225765913727026/boww.png" class="seal-bow" onclick="openPage()">
     </div>
 
     <div id="pass-screen">
-        <h2 style="font-family:'Rangile'; color:#EDD3E7">What's the password?</h2>
-        <div class="pass-bg">
-            <div class="pass-box"><div class="grid" id="pad"></div></div>
+        <h2 style="font-family:'Rangile'; color:#EDD3E7;">What's the password?</h2>
+        <div class="pass-menu-png">
+            <div class="pass-box-png"><div class="hotspot-grid" id="num-pad"></div></div>
         </div>
-        <div class="cookies">
+        <div class="cookie-tray">
             <div id="ck1" class="cookie">🍪</div><div id="ck2" class="cookie">🍪</div><div id="ck3" class="cookie">🍪</div>
         </div>
-        <button onclick="submitPass()" style="margin-top:20px; font-family:'Rangile'; background:#EDD3E7; border:none; color:white; padding:12px 30px; border-radius:25px; cursor:pointer; font-size: 18px;">Done!</button>
+        <button onclick="checkPass()" style="margin-top:10px; font-family:'Rangile'; background:rgba(245,230,245,0.7); border:none; padding:10px 20px; border-radius:20px; cursor:pointer;">Done!</button>
     </div>
 
     <div id="page-wrapper">
-        <div style="display:flex; justify-content:center; margin-bottom:10px;">
-            <img src="https://i.pinimg.com/736x/02/73/11/027311452148282f9e0a95da919353cb.jpg" style="width:180px; cursor:pointer;" onclick="duplicate()">
-        </div>
-        <div id="page-bg">
-            <img src="https://i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif" class="bullet" id="bullet-icon">
-            <img src="https://i.pinimg.com/1200x/45/50/84/455084972042bdcb6191dc8e0752b777.jpg" id="lover" onmouseover="showBubble()" onmouseout="hideBubble()" onclick="callHelper()">
+        <img src="https://media.discordapp.net/attachments/895431804650131457/1474228553120878704/image-removebg-preview_22.png" style="width:160px; cursor:pointer;" onclick="duplicate()">
+        <div id="page-img">
+            <img src="https://images-ext-1.discordapp.net/external/UhGg9wTotcA2D9goPdxarf_j0JAFcxlPMZEN2qx30Yc/https/i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif" class="bullet-gif" onclick="cycleSize()">
+            <img src="https://media.discordapp.net/attachments/895431804650131457/1474227333807341710/image-removebg-preview_17.png" id="lover" onmouseover="document.getElementById('speech-bubble').style.display='block'" onmouseout="document.getElementById('speech-bubble').style.display='none'" onclick="showHelper()">
             <div id="speech-bubble">need help?</div>
-            <textarea id="main-text" class="page-input" placeholder="Start typing here..."></textarea>
+            <textarea id="main-text" class="page-input" placeholder="Start writing..."></textarea>
         </div>
     </div>
 
-    <img src="https://i.pinimg.com/736x/1d/82/af/1d82af579a52b2af6d07b377052916e3.jpg" id="helper-img" style="display:none; position:fixed; bottom:20px; right:20px; width:80px; cursor:pointer;" onclick="showMenu()">
+    <img src="https://media.discordapp.net/attachments/895431804650131457/1474227333807341710/image-removebg-preview_17.png" id="helper" onclick="toggleMenu()">
+    <div id="helper-menu">
+        <button class="menu-btn" onclick="resetPage()">Reset</button>
+        <button class="menu-btn" onclick="alert('Audio Settings coming soon!')">Audio</button>
+        <button class="menu-btn" onclick="keepSecret()">Keep A Secret</button>
+        <button class="menu-btn" onclick="toggleMenu()">Done</button>
+    </div>
 
-    <div id="jumpscare"><img src="https://i.pinimg.com/736x/af/8b/0a/af8b0ac2dd0ea5fd38be9d2ec08e5340.jpg" width="85%"></div>
+    <div id="jumpscare"><img src="https://media.discordapp.net/attachments/895431804650131457/1474228336870953062/image-removebg-preview_21.png" width="80%"></div>
 
     <script>
         const _supabase = supabase.createClient('https://memmuagjbhuvtkoxbpqt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lbW11YWdqYmh1dnRrb3hicHF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NDU1NzIsImV4cCI6MjA4NzEyMTU3Mn0.jWq9fHmAt4Kw-7GWJdqFET0ygzgHdLahfjebqhuHKLU');
         const user = new URLSearchParams(window.location.search).get('user') || 'sliceofkeike';
 
-        let p1, p2, currentInput = "", fails = 0;
+        let player1, player2, currentPass = "", fails = 0, fSize = 18;
         const pop = new Audio('https://www.soundjay.com/buttons/sounds/button-20.mp3');
         const phone = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
-        const chime = new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3');
 
         function onYouTubeIframeAPIReady() {
-            p1 = new YT.Player('player1', { height: '0', width: '0', videoId: 'vQM2EJZqzko' });
-            p2 = new YT.Player('player2', { height: '0', width: '0', videoId: 'PUhHtqTdbVw' });
+            player1 = new YT.Player('p1', { height: '0', width: '0', videoId: 'vQM2EJZqzko' });
+            player2 = new YT.Player('p2', { height: '0', width: '0', videoId: 'PUhHtqTdbVw' });
         }
 
-        const pad = document.getElementById('pad');
+        const grid = document.getElementById('num-pad');
         for(let i=1; i<=12; i++){
-            let k = document.createElement('div'); k.className = 'key';
-            if(i<=9) k.onclick = () => { phone.play(); currentInput += i; };
-            if(i==11) k.onclick = () => { phone.play(); currentInput += 0; };
-            pad.appendChild(k);
+            let d = document.createElement('div'); d.className = 'key';
+            if(i<=9) d.onclick = () => { phone.play(); currentPass += i; };
+            if(i==11) d.onclick = () => { phone.play(); currentPass += 0; };
+            grid.appendChild(d);
         }
 
-        async function startIntro() {
-            pop.play(); p1.playVideo();
+        async function startFlow() {
+            pop.play(); player1.playVideo();
             document.getElementById('intro-btn').style.display = 'none';
             let { data } = await _supabase.from('widget_data').select('*').eq('user_name', user).single();
             if(!data) {
                 await _supabase.from('widget_data').insert([{ user_name: user, content: '', password: '0307', is_locked: true }]);
-                return startIntro();
+                return startFlow();
             }
             if(data.is_locked) document.getElementById('pass-screen').style.display = 'block';
             else showEnvelope();
         }
 
-        async function submitPass() {
+        async function checkPass() {
             let { data } = await _supabase.from('widget_data').select('password').eq('user_name', user).single();
-            if(currentInput === data.password) { chime.play(); showEnvelope(); }
-            else { 
-                fails++; currentInput = "";
+            if(currentPass === data.password) { showEnvelope(); }
+            else {
+                fails++; currentPass = "";
                 if(fails <= 3) document.getElementById(`ck${fails}`).classList.add('frosted');
                 if(fails >= 4) { 
-                    document.querySelectorAll('.cookie').forEach(c => c.classList.add('burnt')); 
+                    document.querySelectorAll('.cookie').forEach(c => c.classList.add('burnt'));
                     document.getElementById('jumpscare').style.display='flex';
                     new Audio('https://www.soundjay.com/misc/sounds/fail-buzzer-01.mp3').play();
                 }
             }
         }
 
-        function showEnvelope() { document.getElementById('pass-screen').style.display='none'; document.getElementById('envelope').style.display='block'; }
-        function openLetter() { pop.play(); p1.stopVideo(); p2.playVideo(); document.getElementById('envelope').style.display='none'; document.getElementById('page-wrapper').style.display='block'; loadContent(); }
+        function showEnvelope() { document.getElementById('pass-screen').style.display='none'; document.getElementById('envelope-area').style.display='block'; }
+        function openPage() { 
+            pop.play(); player1.stopVideo(); player2.playVideo();
+            document.getElementById('envelope-area').style.display='none';
+            document.getElementById('page-wrapper').style.display='block';
+            loadData();
+        }
 
-        async function loadContent() {
+        async function loadData() {
             let { data } = await _supabase.from('widget_data').select('content').eq('user_name', user).single();
             document.getElementById('main-text').value = data.content;
         }
@@ -174,17 +170,12 @@
             await _supabase.from('widget_data').update({ content: e.target.value }).eq('user_name', user);
         };
 
-        function showBubble() { document.getElementById('speech-bubble').style.display = 'block'; }
-        function hideBubble() { document.getElementById('speech-bubble').style.display = 'none'; }
-        function callHelper() { pop.play(); document.getElementById('lover').style.display='none'; document.getElementById('helper-img').style.display='block'; }
-
-        function duplicate() {
-            const n = prompt("New Page Name:");
-            if(n) {
-                const url = window.location.origin + window.location.pathname + "?user=" + n;
-                alert("New Page URL: " + url);
-            }
-        }
+        function cycleSize() { fSize = fSize >= 24 ? 18 : fSize + 2; document.getElementById('main-text').style.fontSize = fSize + 'px'; }
+        function showHelper() { pop.play(); document.getElementById('lover').style.display='none'; document.getElementById('helper').style.display='block'; }
+        function toggleMenu() { document.getElementById('helper-menu').style.display = document.getElementById('helper-menu').style.display === 'block' ? 'none' : 'block'; }
+        function resetPage() { if(confirm("Clear page?")) { document.getElementById('main-text').value = ""; document.getElementById('main-text').dispatchEvent(new Event('input')); } }
+        async function keepSecret() { await _supabase.from('widget_data').update({ is_locked: true }).eq('user_name', user); location.reload(); }
+        function duplicate() { const n = prompt("New Page Name:"); if(n) alert("New link: " + window.location.origin + window.location.pathname + "?user=" + n); }
 
         var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(tag);
     </script>
