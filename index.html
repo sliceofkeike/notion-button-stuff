@@ -8,12 +8,11 @@
     <link href="https://fonts.cdnfonts.com/css/gluten" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/babydoll" rel="stylesheet">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style>
         :root { --a-pink: #EDD3E7; }
         body { margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; background: white; min-height: 100vh; font-family: 'Babydoll', sans-serif; }
 
+        /* INTRO BUTTON */
         #intro-btn { 
             cursor: pointer; width: 350px; height: 70px; background: var(--a-pink); border-radius: 40px;
             display: flex; justify-content: center; align-items: center; color: white;
@@ -21,8 +20,10 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 50px;
         }
 
+        /* THE PAGE WRAPPER */
         #page-wrapper { display: none; width: 420px; position: relative; }
 
+        /* THE BOW PAPER */
         #page-content { 
             width: 100%; height: 550px; 
             background: url('https://media.discordapp.net/attachments/895431804650131457/1474226812920791163/0c839340ccbd8c5f89d9c09a555ae67c-removebg-preview.png') no-repeat center;
@@ -30,27 +31,26 @@
             padding: 95px 50px; box-sizing: border-box; position: relative;
         }
 
-        /* FIXED BULLET LOGIC */
+        /* THE TEXT AREA WITH BULLETS */
         #diary-input {
             width: 100%; height: 320px; outline: none;
             font-family: 'Babydoll'; font-size: 19px; color: #555;
             overflow-y: auto; text-align: left;
-            line-height: 2.2; /* Spacing between lines */
+            line-height: 2.2;
         }
 
-        /* This forces the GIF to be a small bullet on every new line */
+        /* Custom Bullet Logic */
         #diary-input div {
             padding-left: 35px;
             background: url('https://images-ext-1.discordapp.net/external/UhGg9wTotcA2D9goPdxarf_j0JAFcxlPMZEN2qx30Yc/https/i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif') no-repeat left center;
-            background-size: 25px 25px; /* STRICT SIZE */
+            background-size: 22px 22px; /* Small and strictly colorful */
             min-height: 30px;
-            filter: none !important; /* Forces color to stay */
         }
 
         #lover {
             position: absolute; top: 15px; right: 25px; width: 40px; height: 40px;
             background: #EDD3E7; clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
-            cursor: pointer; transform: scale(1.5); z-index: 5;
+            cursor: pointer; transform: scale(1.5);
         }
     </style>
 </head>
@@ -64,45 +64,35 @@
         <div id="page-content">
             <div id="lover"></div>
             <div id="diary-input" contenteditable="true">
-                <div>Start your first note...</div>
+                <div>Start typing here...</div>
             </div>
         </div>
     </div>
 
     <script>
-        const _supabase = supabase.createClient('https://memmuagjbhuvtkoxbpqt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lbW11YWdqYmh1dnRrb3hicHF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NDU1NzIsImV4cCI6MjA4NzEyMTU3Mn0.jWq9fHmAt4Kw-7GWJdqFET0ygzgHdLahfjebqhuHKLU');
-        const user = new URLSearchParams(window.location.search).get('user') || 'sliceofkeike';
-
         let player;
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('p2', { height: '0', width: '0', videoId: 'PUhHtqTdbVw' });
         }
 
-        async function startFlow() {
+        function startFlow() {
             document.getElementById('intro-btn').style.display = 'none';
             document.getElementById('page-wrapper').style.display = 'block';
             if(player && player.playVideo) player.playVideo();
             
-            let { data } = await _supabase.from('widget_data').select('content').eq('user_name', user).maybeSingle();
-            if (data && data.content) {
-                document.getElementById('diary-input').innerHTML = data.content;
+            // LOAD DATA FROM LAPTOP MEMORY
+            const savedData = localStorage.getItem('my_diary_data');
+            if (savedData) {
+                document.getElementById('diary-input').innerHTML = savedData;
             }
         }
 
-        // Saves exactly what you see
-        document.getElementById('diary-input').oninput = async () => {
+        // SAVE DATA TO LAPTOP MEMORY EVERY TIME YOU TYPE
+        document.getElementById('diary-input').oninput = () => {
             const content = document.getElementById('diary-input').innerHTML;
-            await _supabase.from('widget_data').update({ content: content }).eq('user_name', user);
+            localStorage.setItem('my_diary_data', content);
         };
-
-        // Makes sure every "Enter" creates a new div with a bullet
-        document.getElementById('diary-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                // The browser handles creating the new <div> automatically 
-                // and our CSS ensures that <div> has the bullet background.
-            }
-        });
 
         var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
