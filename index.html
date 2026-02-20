@@ -7,15 +7,13 @@
     
     <link href="https://fonts.cdnfonts.com/css/gluten" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/babydoll" rel="stylesheet">
-    <link href="https://fonts.cdnfonts.com/css/tasty" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        :root { --a-pink: #EDD3E7; --p-pink: #F5E6F5; }
+        :root { --a-pink: #EDD3E7; }
         body { margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; background: white; min-height: 100vh; font-family: 'Babydoll', sans-serif; }
 
-        /* INTRO BUTTON */
         #intro-btn { 
             cursor: pointer; width: 350px; height: 70px; background: var(--a-pink); border-radius: 40px;
             display: flex; justify-content: center; align-items: center; color: white;
@@ -23,46 +21,35 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 50px;
         }
 
-        /* THE PAGE WRAPPER */
         #page-wrapper { display: none; width: 420px; position: relative; }
 
-        /* ADD ANOTHER ME BUTTON */
-        #add-me-btn {
-            cursor: pointer; background: none; border: none; width: 100%;
-            font-family: 'Tasty'; font-size: 18px; color: #EDD3E7; margin-bottom: 10px;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-
-        /* THE BOW PAPER (The Page) */
         #page-content { 
             width: 100%; height: 550px; 
             background: url('https://media.discordapp.net/attachments/895431804650131457/1474226812920791163/0c839340ccbd8c5f89d9c09a555ae67c-removebg-preview.png') no-repeat center;
             background-size: 100% 100%;
-            padding: 95px 55px; box-sizing: border-box; position: relative;
+            padding: 95px 45px; box-sizing: border-box; position: relative;
+            overflow-y: auto;
         }
 
-        /* WRITING AREA */
-        .page-input { background: transparent; border: none; outline: none; font-family: 'Babydoll'; width: 100%; height: 320px; resize: none; line-height: 1.6; font-size: 19px; color: #555; }
-
-        /* THE BULLET POINT (GIF) */
-        .bullet-point {
-            position: absolute; left: 20px; top: 95px; width: 35px; height: 35px;
-            background: url('https://i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif') no-repeat center/contain;
-            cursor: pointer;
+        /* This creates the bullet points on every new line */
+        #diary-input {
+            width: 100%; min-height: 320px; outline: none;
+            font-family: 'Babydoll'; font-size: 19px; color: #555;
+            list-style-type: none; padding: 0; margin: 0;
         }
 
-        /* LOVER HEART */
+        #diary-input div {
+            display: list-item;
+            list-style-image: url('https://images-ext-1.discordapp.net/external/UhGg9wTotcA2D9goPdxarf_j0JAFcxlPMZEN2qx30Yc/https/i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif');
+            margin-left: 25px;
+            padding-left: 10px;
+            line-height: 1.8;
+        }
+
         #lover {
             position: absolute; top: 15px; right: 25px; width: 40px; height: 40px;
             background: #EDD3E7; clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
-            cursor: pointer; transform: scale(1.5);
-        }
-
-        /* HELPER */
-        #helper {
-            display: none; position: fixed; bottom: 40px; right: 40px; width: 80px; height: 80px;
-            background: url('https://media.discordapp.net/attachments/895431804650131457/1474227333807341710/image-removebg-preview_17.png') no-repeat center/contain;
-            cursor: pointer; z-index: 100;
+            cursor: pointer; transform: scale(1.5); z-index: 5;
         }
     </style>
 </head>
@@ -73,63 +60,41 @@
     <div id="intro-btn" onclick="startFlow()">Ready to make a change?</div>
 
     <div id="page-wrapper">
-        <button id="add-me-btn" onclick="duplicate()">
-            <img src="https://media.discordapp.net/attachments/895431804650131457/1474228553120878704/image-removebg-preview_22.png" width="100">
-            Add Another Me <3
-        </button>
-
         <div id="page-content">
-            <div class="bullet-point" onclick="cycleFontSize()"></div>
-            <div id="lover" onclick="callHelper()"></div>
-            <textarea id="main-text" class="page-input" placeholder="Write here..."></textarea>
+            <div id="lover"></div>
+            <div id="diary-input" contenteditable="true">
+                <div>Start typing...</div>
+            </div>
         </div>
     </div>
-
-    <div id="helper" onclick="alert('Helper Menu Coming Soon!')"></div>
 
     <script>
         const _supabase = supabase.createClient('https://memmuagjbhuvtkoxbpqt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lbW11YWdqYmh1dnRrb3hicHF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NDU1NzIsImV4cCI6MjA4NzEyMTU3Mn0.jWq9fHmAt4Kw-7GWJdqFET0ygzgHdLahfjebqhuHKLU');
         const user = new URLSearchParams(window.location.search).get('user') || 'sliceofkeike';
 
-        let player2, fSize = 19;
+        let player;
 
         function onYouTubeIframeAPIReady() {
-            player2 = new YT.Player('p2', { height: '0', width: '0', videoId: 'PUhHtqTdbVw' });
+            player = new YT.Player('p2', { height: '0', width: '0', videoId: 'PUhHtqTdbVw' });
         }
 
         async function startFlow() {
             document.getElementById('intro-btn').style.display = 'none';
             document.getElementById('page-wrapper').style.display = 'block';
-            if(player2 && player2.playVideo) player2.playVideo();
-            loadData();
-        }
-
-        async function loadData() {
+            if(player && player.playVideo) player.playVideo();
+            
+            // Load from Supabase (so it stays on your laptop)
             let { data } = await _supabase.from('widget_data').select('content').eq('user_name', user).maybeSingle();
-            if (data) document.getElementById('main-text').value = data.content;
-        }
-
-        document.getElementById('main-text').oninput = async (e) => {
-            await _supabase.from('widget_data').update({ content: e.target.value }).eq('user_name', user);
-        };
-
-        function callHelper() {
-            document.getElementById('lover').style.display = 'none';
-            document.getElementById('helper').style.display = 'block';
-        }
-
-        function cycleFontSize() {
-            fSize = fSize >= 25 ? 19 : fSize + 3;
-            document.getElementById('main-text').style.fontSize = fSize + 'px';
-        }
-
-        function duplicate() {
-            const newName = prompt("Enter a name for your new page (e.g., diary2):");
-            if(newName) {
-                const currentUrl = window.location.href.split('?')[0];
-                window.open(`${currentUrl}?user=${newName}`, '_blank');
+            if (data && data.content) {
+                document.getElementById('diary-input').innerHTML = data.content;
             }
         }
+
+        // Auto-save logic
+        document.getElementById('diary-input').oninput = async () => {
+            const content = document.getElementById('diary-input').innerHTML;
+            await _supabase.from('widget_data').update({ content: content }).eq('user_name', user);
+        };
 
         var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
