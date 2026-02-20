@@ -27,23 +27,24 @@
             width: 100%; height: 550px; 
             background: url('https://media.discordapp.net/attachments/895431804650131457/1474226812920791163/0c839340ccbd8c5f89d9c09a555ae67c-removebg-preview.png') no-repeat center;
             background-size: 100% 100%;
-            padding: 95px 45px; box-sizing: border-box; position: relative;
-            overflow-y: auto;
+            padding: 95px 50px; box-sizing: border-box; position: relative;
         }
 
-        /* This creates the bullet points on every new line */
+        /* FIXED BULLET LOGIC */
         #diary-input {
-            width: 100%; min-height: 320px; outline: none;
+            width: 100%; height: 320px; outline: none;
             font-family: 'Babydoll'; font-size: 19px; color: #555;
-            list-style-type: none; padding: 0; margin: 0;
+            overflow-y: auto; text-align: left;
+            line-height: 2.2; /* Spacing between lines */
         }
 
+        /* This forces the GIF to be a small bullet on every new line */
         #diary-input div {
-            display: list-item;
-            list-style-image: url('https://images-ext-1.discordapp.net/external/UhGg9wTotcA2D9goPdxarf_j0JAFcxlPMZEN2qx30Yc/https/i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif');
-            margin-left: 25px;
-            padding-left: 10px;
-            line-height: 1.8;
+            padding-left: 35px;
+            background: url('https://images-ext-1.discordapp.net/external/UhGg9wTotcA2D9goPdxarf_j0JAFcxlPMZEN2qx30Yc/https/i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif') no-repeat left center;
+            background-size: 25px 25px; /* STRICT SIZE */
+            min-height: 30px;
+            filter: none !important; /* Forces color to stay */
         }
 
         #lover {
@@ -63,7 +64,7 @@
         <div id="page-content">
             <div id="lover"></div>
             <div id="diary-input" contenteditable="true">
-                <div>Start typing...</div>
+                <div>Start your first note...</div>
             </div>
         </div>
     </div>
@@ -83,18 +84,25 @@
             document.getElementById('page-wrapper').style.display = 'block';
             if(player && player.playVideo) player.playVideo();
             
-            // Load from Supabase (so it stays on your laptop)
             let { data } = await _supabase.from('widget_data').select('content').eq('user_name', user).maybeSingle();
             if (data && data.content) {
                 document.getElementById('diary-input').innerHTML = data.content;
             }
         }
 
-        // Auto-save logic
+        // Saves exactly what you see
         document.getElementById('diary-input').oninput = async () => {
             const content = document.getElementById('diary-input').innerHTML;
             await _supabase.from('widget_data').update({ content: content }).eq('user_name', user);
         };
+
+        // Makes sure every "Enter" creates a new div with a bullet
+        document.getElementById('diary-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                // The browser handles creating the new <div> automatically 
+                // and our CSS ensures that <div> has the bullet background.
+            }
+        });
 
         var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
