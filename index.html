@@ -17,234 +17,217 @@
         :root {
             --pastel-pink: #F5E6F5;
             --accent-pink: #EDD3E7;
-            --font-main: 'Babydoll', sans-serif;
         }
 
         body {
             margin: 0; padding: 20px;
             display: flex; flex-direction: column; align-items: center;
-            background-color: transparent; font-family: var(--font-main);
-            user-select: none;
+            background: transparent; font-family: 'Babydoll', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* --- PASSWORD BOX OVERLAY (HOTSPOTS) --- */
-        #password-menu {
-            display: none;
-            position: relative;
-            width: 350px;
+        /* --- INTRO STRIP --- */
+        #intro-section {
+            cursor: pointer; width: 500px; height: 80px;
+            background: #EDD3E7; border-radius: 40px;
+            display: flex; justify-content: center; align-items: center;
+            color: white; font-family: 'Gluten'; font-size: 22px;
+            transition: 0.3s;
+        }
+
+        /* --- ENVELOPE --- */
+        #envelope-container {
+            display: none; position: relative; width: 300px;
+        }
+        .seal {
+            width: 100px; cursor: pointer; transition: 0.3s;
+        }
+        .bounce { animation: bounce 0.5s ease infinite; }
+
+        /* --- PASSWORD SYSTEM --- */
+        #password-screen {
+            display: none; width: 400px; text-align: center;
+        }
+        .pass-menu-bg {
+            width: 100%; position: relative;
+            background: url('https://i.pinimg.com/736x/55/8f/89/558f89fbd04ac675c094ed2808ab78d2.jpg') no-repeat center/contain;
             height: 500px;
-            background: url('https://i.pinimg.com/736x/55/8f/89/558f89fbd04ac675c094ed2808ab78d2.jpg') no-repeat center;
-            background-size: contain;
         }
+        .pass-box-overlay {
+            position: absolute; top: 120px; left: 50%; transform: translateX(-50%);
+            width: 260px; height: 350px;
+            background: url('https://i.pinimg.com/736x/dd/a1/98/dda198020305d044b4fe3efed1454aad.jpg') no-repeat center/contain;
+        }
+        .hotspot-grid {
+            position: absolute; top: 110px; left: 35px;
+            display: grid; grid-template-columns: repeat(3, 60px);
+            grid-template-rows: repeat(4, 50px); gap: 10px;
+        }
+        .key {
+            width: 50px; height: 50px; cursor: pointer; border-radius: 50%;
+            background: rgba(255,255,255,0.01); transition: 0.2s;
+        }
+        .key:hover { background: rgba(245, 230, 245, 0.5); transform: scale(1.1); box-shadow: 0 0 10px white; }
 
-        .pass-box-png {
-            position: absolute;
-            top: 20%; left: 50%;
-            transform: translateX(-50%);
-            width: 250px;
-        }
-
-        /* Invisible Hotspot Grid for Numbers */
-        .num-pad {
-            position: absolute;
-            top: 45%; left: 50%;
-            transform: translateX(-50%);
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            width: 180px;
-        }
-
-        .num-key {
-            width: 50px; height: 50px;
-            background: rgba(255, 255, 255, 0.01); /* Invisible */
-            cursor: pointer;
-            border-radius: 50%;
-            transition: 0.2s;
-        }
-
-        .num-key:hover {
-            background: rgba(237, 211, 231, 0.4); /* Pastel Glow */
-            transform: scale(1.1);
-        }
+        /* COOKIES */
+        .cookie-tray { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+        .cookie { font-size: 40px; transition: all 0.5s; filter: sepia(0.5); }
+        .cookie.frosted { filter: hue-rotate(300deg) saturate(2); }
+        .cookie.burnt { filter: brightness(0.1) grayscale(1); transform: scale(0.8); }
 
         /* --- THE PAGE --- */
         #page-container {
-            display: none;
-            width: 380px;
-            min-height: 550px;
+            display: none; width: 380px; min-height: 500px;
             background: url('https://i.pinimg.com/1200x/0c/83/93/0c839340ccbd8c5f89d9c09a555ae67c.jpg') center/cover;
-            padding: 60px 40px;
-            box-sizing: border-box;
-            position: relative;
+            padding: 60px 40px; position: relative;
+        }
+        .list-item { display: flex; align-items: center; margin-bottom: 15px; }
+        .bullet { width: 30px; margin-right: 10px; cursor: pointer; }
+        .page-input { 
+            background: transparent; border: none; outline: none; 
+            font-family: 'Babydoll'; font-size: 20px; width: 100%;
         }
 
-        .page-input {
-            background: transparent; border: none; outline: none;
-            font-family: 'Babydoll', sans-serif;
-            font-size: 18px; width: 100%;
-            margin-bottom: 15px; padding-left: 35px;
-            background: url('https://i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif') no-repeat left center;
-            background-size: 25px;
+        /* --- JUMPSCARE --- */
+        #jumpscare {
+            display: none; position: fixed; inset: 0; background: black;
+            z-index: 9999; justify-content: center; align-items: center;
         }
 
-        /* HELPER MENU */
-        #helper-menu {
-            display: none;
-            position: absolute;
-            right: -130px; top: 50px;
-            width: 120px;
-            background: url('https://i.pinimg.com/736x/c1/3d/a7/c13da71c31e62c5b681c9aaf2c488495.jpg') center/cover;
-            padding: 10px; border-radius: 10px;
-        }
-
-        .bubble-btn {
-            background: rgba(245, 230, 245, 0.7);
-            border: none; border-radius: 20px;
-            margin: 5px 0; width: 100%;
-            font-family: 'Playpen Sans', sans-serif;
-            cursor: pointer; font-size: 10px;
-        }
-
-        /* UI */
-        .speaker-btn { position: fixed; bottom: 10px; right: 10px; cursor: pointer; background: #F5E6F5; border-radius: 50%; padding: 10px; }
-        
-        #jumpscare { display: none; position: fixed; inset: 0; background: black; z-index: 999; justify-content: center; align-items: center; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
 
-    <div id="audio-slots">
-        <div id="player1"></div>
-        <div id="player2"></div>
+    <div id="player1"></div>
+    <div id="player2"></div>
+
+    <div id="intro-section" onclick="handleIntro()">Ready to make a change?</div>
+
+    <div id="envelope-container">
+        <img src="https://i.pinimg.com/1200x/4c/80/77/4c807778ddfbcebbd3520f9b21b5c21a.jpg" class="seal bounce" onclick="openEnvelope()">
     </div>
 
-    <div id="intro-section" onclick="startFlow()">
-        <div style="background: #EDD3E7; padding: 20px 60px; border-radius: 50px; color: white; font-family: 'Gluten'; cursor: pointer;">
-            Ready to make a change?
-        </div>
-    </div>
-
-    <div id="password-menu">
-        <div style="text-align: center; padding-top: 50px; font-family: 'Rangile'; color: #EDD3E7;">What's the password?</div>
-        <div class="num-pad">
+    <div id="password-screen">
+        <h2 style="font-family: 'Rangile'; color: #EDD3E7;">What's the password?</h2>
+        <div class="pass-menu-bg">
+            <div class="pass-box-overlay">
+                <div class="hotspot-grid" id="number-pad"></div>
             </div>
-        <div id="cookies" style="display: flex; justify-content: center; margin-top: 200px;">
-            <span class="cookie">🍪</span><span class="cookie">🍪</span><span class="cookie">🍪</span>
         </div>
+        <div class="cookie-tray">
+            <div class="cookie" id="c1">🍪</div>
+            <div class="cookie" id="c2">🍪</div>
+            <div class="cookie" id="c3">🍪</div>
+        </div>
+        <button id="done-btn" style="margin-top:20px; font-family:'Rangile'; color:#EDD3E7; border:none; background:white; padding:10px 20px; border-radius:20px; cursor:pointer;" onclick="submitPass()">Done!</button>
     </div>
 
     <div id="page-container">
-        <div id="lover-heart" onclick="showHelper()" style="position: absolute; top: 20px; right: 20px; cursor: pointer;">💗</div>
-        <div id="list-area">
-            <input type="text" class="page-input" placeholder="Start typing...">
-        </div>
-        
-        <div id="helper-menu">
-            <button class="bubble-btn" onclick="resetPage()">Reset</button>
-            <button class="bubble-btn" onclick="toggleSecret()">Keep A Secret</button>
-            <button class="bubble-btn" onclick="closeMenu()">Done</button>
+        <div id="list-items">
+            <div class="list-item">
+                <img src="https://i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif" class="bullet" onclick="showFontMenu()">
+                <input type="text" class="page-input" id="main-input" placeholder="Type here...">
+            </div>
         </div>
     </div>
 
     <div id="jumpscare">
-        <img src="https://i.pinimg.com/736x/af/8b/0a/af8b0ac2dd0ea5fd38be9d2ec08e5340.jpg" width="300">
+        <img src="https://i.pinimg.com/736x/af/8b/0a/af8b0ac2dd0ea5fd38be9d2ec08e5340.jpg" width="80%">
+        <h1 style="color:pink; position:absolute; bottom:50px;">WRONG ANSWER</h1>
     </div>
 
     <script>
-        // --- 1. CONNECT TO YOUR BRAIN ---
-        const _supabase = supabase.createClient('https://memmuagjbhuvtkoxbpqt.supabase.co');
+        // SUPABASE CONFIG
+        const _supabase = supabase.createClient('https://memmuagjbhuvtkoxbpqt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lbW11YWdqYmh1dnRrb3hicHF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NDU1NzIsImV4cCI6MjA4NzEyMTU3Mn0.jWq9fHmAt4Kw-7GWJdqFET0ygzgHdLahfjebqhuHKLU');
 
-        // --- 2. AUDIO CLIPS ---
+        // AUDIO
         const pop = new Audio('https://www.soundjay.com/buttons/sounds/button-20.mp3');
         const chime = new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3');
+        const phoneClick = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
         const buzzer = new Audio('https://www.soundjay.com/misc/sounds/fail-buzzer-01.mp3');
 
-        // --- 3. YOUTUBE SETUP ---
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        document.head.appendChild(tag);
-
+        // YT PLAYERS
         let p1, p2;
         function onYouTubeIframeAPIReady() {
             p1 = new YT.Player('player1', { height: '0', width: '0', videoId: 'vQM2EJZqzko' });
             p2 = new YT.Player('player2', { height: '0', width: '0', videoId: 'PUhHtqTdbVw' });
         }
 
-        // --- 4. ENGINE ---
-        async function startFlow() {
+        // INIT NUMBER PAD
+        const pad = document.getElementById('number-pad');
+        let currentEntry = "";
+        for(let i=1; i<=10; i++){
+            let key = document.createElement('div');
+            key.className = 'key';
+            let num = i === 10 ? 0 : i;
+            key.onclick = () => { phoneClick.play(); currentEntry += num; };
+            pad.appendChild(key);
+        }
+
+        async function handleIntro() {
             pop.play();
             document.getElementById('intro-section').style.display = 'none';
             
-            // Check Database if locked
-            const { data } = await _supabase.from('widget_data').select('*').single();
-            if (data?.is_locked) {
-                document.getElementById('password-menu').style.display = 'block';
+            const { data } = await _supabase.from('widget_data').select('*').eq('id', 1).single();
+            if(data.is_locked) {
+                document.getElementById('password-screen').style.display = 'block';
             } else {
-                document.getElementById('page-container').style.display = 'block';
-                p2.playVideo();
+                document.getElementById('envelope-container').style.display = 'block';
+                p1.playVideo();
             }
         }
 
-        // Create Number Pad Hotspots
-        const pad = document.querySelector('.num-pad');
-        for(let i=1; i<=9; i++) {
-            let btn = document.createElement('div');
-            btn.className = 'num-key';
-            btn.onclick = () => { pop.play(); checkPass(i); };
-            pad.appendChild(btn);
-        }
-
-        let entered = "";
-        async function checkPass(num) {
-            entered += num;
-            const { data } = await _supabase.from('widget_data').select('password').single();
-            
-            if (entered.length >= data.password.length) {
-                if (entered === data.password) {
-                    chime.play();
-                    document.getElementById('password-menu').style.display = 'none';
-                    document.getElementById('page-container').style.display = 'block';
-                    p2.playVideo();
-                } else {
-                    handleWrong();
-                }
-                entered = "";
+        async function submitPass() {
+            const { data } = await _supabase.from('widget_data').select('password').eq('id', 1).single();
+            if(currentEntry === data.password) {
+                chime.play();
+                document.getElementById('password-screen').style.display = 'none';
+                document.getElementById('envelope-container').style.display = 'block';
+                p1.playVideo();
+            } else {
+                wrongPass();
             }
+            currentEntry = "";
         }
 
         let fails = 0;
-        function handleWrong() {
+        function wrongPass() {
             fails++;
-            const cookies = document.querySelectorAll('.cookie');
-            if (fails <= 3) cookies[fails-1].innerText = "💖"; // Pink frosting
-            if (fails === 3) {
+            if(fails <= 3) {
+                document.getElementById(`c${fails}`).classList.add('frosted');
+            }
+            if(fails >= 4) {
+                document.getElementById('c1').classList.add('burnt');
+                document.getElementById('c2').classList.add('burnt');
+                document.getElementById('c3').classList.add('burnt');
                 buzzer.play();
                 document.getElementById('jumpscare').style.display = 'flex';
-                setTimeout(() => { document.getElementById('jumpscare').style.display = 'none'; }, 1500);
+                setTimeout(() => { document.getElementById('jumpscare').style.display = 'none'; }, 2000);
             }
         }
 
-        // Universal Save to Database
-        async function saveToCloud(content) {
-            await _supabase.from('widget_data').update({ content: content }).eq('id', 1);
-        }
-
-        // Listen for typing
-        document.querySelector('.page-input').addEventListener('input', (e) => {
-            saveToCloud(e.target.value);
-        });
-
-        function showHelper() {
+        function openEnvelope() {
             pop.play();
-            document.getElementById('helper-menu').style.display = 'block';
+            document.getElementById('envelope-container').style.display = 'none';
+            document.getElementById('page-container').style.display = 'block';
+            p1.stopVideo(); p2.playVideo();
+            loadSyncData();
         }
 
-        function closeMenu() {
-            pop.play();
-            document.getElementById('helper-menu').style.display = 'none';
+        async function loadSyncData() {
+            const { data } = await _supabase.from('widget_data').select('content').eq('id', 1).single();
+            document.getElementById('main-input').value = data.content;
         }
 
+        document.getElementById('main-input').oninput = async (e) => {
+            await _supabase.from('widget_data').update({ content: e.target.value }).eq('id', 1);
+        };
+
+        // LOAD YT API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(tag);
     </script>
 </body>
 </html>
