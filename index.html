@@ -6,170 +6,73 @@
     <title>Dream Widget</title>
     
     <link href="https://fonts.cdnfonts.com/css/gluten" rel="stylesheet">
-    <link href="https://fonts.cdnfonts.com/css/playpen-sans" rel="stylesheet">
-    <link href="https://fonts.cdnfonts.com/css/rangile" rel="stylesheet">
-    <link href="https://fonts.cdnfonts.com/css/tasty" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/babydoll" rel="stylesheet">
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        :root { --p-pink: #F5E6F5; --a-pink: #EDD3E7; }
-        body { margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; background: transparent; overflow-x: hidden; font-family: 'Babydoll', sans-serif; }
+        :root { --a-pink: #EDD3E7; }
+        body { margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; background: white; min-height: 100vh; }
 
-        /* INTRO BUTTON */
         #intro-btn { 
             cursor: pointer; width: 350px; height: 70px; background: var(--a-pink); border-radius: 40px;
             display: flex; justify-content: center; align-items: center; color: white;
             font-family: 'Gluten'; font-size: 20px; font-weight: bold; border: 4px solid white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 10; transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 40px;
         }
 
-        /* THE PAGE */
         #page-wrapper { display: none; width: 420px; position: relative; }
         #page-content { 
             width: 100%; height: 550px; 
             background: url('https://media.discordapp.net/attachments/895431804650131457/1474226812920791163/0c839340ccbd8c5f89d9c09a555ae67c-removebg-preview.png') no-repeat center;
             background-size: 100% 100%;
-            padding: 95px 55px; box-sizing: border-box; position: relative;
+            padding: 95px 55px; box-sizing: border-box;
         }
-        .page-input { background: transparent; border: none; outline: none; font-family: 'Babydoll'; width: 100%; height: 320px; resize: none; line-height: 1.6; font-size: 18px; color: #555; }
-
-        /* BULLET POINT GIF */
-        .bullet-gif { width: 35px; position: absolute; left: 20px; top: 95px; cursor: pointer; }
-
-        /* LOVER & HELPER */
-        #lover { position: absolute; top: 15px; right: 25px; width: 45px; cursor: pointer; z-index: 10; }
-        #speech-bubble { 
-            display: none; position: absolute; top: 10px; right: 80px; background: white; 
-            padding: 6px 12px; border-radius: 15px; font-family: 'Playpen Sans'; font-size: 14px;
-            border: 2px solid var(--a-pink); color: var(--a-pink);
-        }
-        #helper-img { display: none; position: fixed; bottom: 80px; right: 20px; width: 80px; cursor: pointer; z-index: 100; }
-        #helper-menu { 
-            display: none; position: fixed; bottom: 80px; right: 110px; width: 180px; 
-            background: url('https://media.discordapp.net/attachments/895431804650131457/1474227573591642112/image-removebg-preview_18.png') no-repeat center;
-            background-size: contain; padding: 35px 20px; text-align: center; z-index: 101;
-        }
-        .menu-opt { background: rgba(255,255,255,0.7); border: none; border-radius: 12px; width: 90%; margin: 4px 0; padding: 6px; font-family: 'Playpen Sans'; cursor: pointer; color: var(--a-pink); font-size: 13px; }
-
-        /* PASSWORD STUFF */
-        #pass-screen { display: none; text-align: center; width: 400px; }
-        .pass-menu-png { width: 100%; height: 400px; background: url('https://media.discordapp.net/attachments/895431804650131457/1474227849413132368/image-removebg-preview_19.png') no-repeat center/contain; position: relative; }
-        .pass-box-png { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); width: 220px; height: 280px; background: url('https://media.discordapp.net/attachments/895431804650131457/1474228072709492846/image-removebg-preview_20.png') no-repeat center/contain; }
-        .hotspot-grid { position: absolute; top: 75px; left: 25px; display: grid; grid-template-columns: repeat(3, 55px); grid-template-rows: repeat(4, 45px); }
-        .key { width: 50px; height: 40px; cursor: pointer; }
-
-        /* SPEAKER ICON */
-        .speaker-bubble { position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; background: var(--p-pink); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 200; font-size: 18px; }
-
-        #jumpscare { display: none; position: fixed; inset: 0; background: black; z-index: 9999; justify-content: center; align-items: center; }
+        .page-input { background: transparent; border: none; outline: none; font-family: 'Babydoll'; width: 100%; height: 320px; resize: none; font-size: 18px; color: #555; }
     </style>
 </head>
 <body>
 
-    <div id="p1" style="position:absolute; top:-1000px;"></div>
     <div id="p2" style="position:absolute; top:-1000px;"></div>
 
     <div id="intro-btn" onclick="startFlow()">Ready to make a change?</div>
 
-    <div id="pass-screen">
-        <h2 style="font-family:'Rangile'; color:#EDD3E7;">What's the password?</h2>
-        <div class="pass-menu-png">
-            <div class="pass-box-png"><div class="hotspot-grid" id="num-pad"></div></div>
-        </div>
-        <button onclick="checkPass()" style="margin-top:10px; font-family:'Rangile'; background:var(--a-pink); border:none; color:white; padding:10px 25px; border-radius:20px; cursor:pointer;">Done!</button>
-    </div>
-
     <div id="page-wrapper">
-        <div style="text-align:center; margin-bottom: 5px;">
-            <img src="https://media.discordapp.net/attachments/895431804650131457/1474228553120878704/image-removebg-preview_22.png" style="width:150px; cursor:pointer;" onclick="duplicate()">
-        </div>
         <div id="page-content">
-            <img src="https://images-ext-1.discordapp.net/external/UhGg9wTotcA2D9goPdxarf_j0JAFcxlPMZEN2qx30Yc/https/i.pinimg.com/originals/13/22/60/1322609ad9b6a08e9807fead886c808d.gif" class="bullet-gif" id="bullet" onclick="cycleSize()">
-            <img src="https://media.discordapp.net/attachments/895431804650131457/1474227333807341710/image-removebg-preview_17.png" id="lover" onmouseover="showBubble()" onmouseout="hideBubble()" onclick="callHelper()">
-            <div id="speech-bubble">need help?</div>
-            <textarea id="main-text" class="page-input" placeholder="Start typing..."></textarea>
+            <textarea id="main-text" class="page-input" placeholder="Start typing here..."></textarea>
         </div>
     </div>
-
-    <img src="https://media.discordapp.net/attachments/895431804650131457/1474227333807341710/image-removebg-preview_17.png" id="helper-img" onclick="toggleMenu()">
-    <div id="helper-menu">
-        <button class="menu-opt" onclick="resetPage()">Reset</button>
-        <button class="menu-opt" onclick="toggleMusic()">Mute Music</button>
-        <button class="menu-opt" onclick="toggleSfx()">Mute SFX</button>
-        <button class="menu-opt" onclick="toggleMenu()">Done</button>
-    </div>
-
-    <div class="speaker-bubble" onclick="toggleMusic()">🔊</div>
-    <div id="jumpscare"><img src="https://media.discordapp.net/attachments/895431804650131457/1474228336870953062/image-removebg-preview_21.png" width="80%"></div>
 
     <script>
         const _supabase = supabase.createClient('https://memmuagjbhuvtkoxbpqt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lbW11YWdqYmh1dnRrb3hicHF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NDU1NzIsImV4cCI6MjA4NzEyMTU3Mn0.jWq9fHmAt4Kw-7GWJdqFET0ygzgHdLahfjebqhuHKLU');
-        const user = new URLSearchParams(window.location.search).get('user') || 'sliceofkeike';
+        
+        const params = new URLSearchParams(window.location.search);
+        const user = params.get('user') || 'sliceofkeike';
 
-        let player1, player2, currentPass = "", sfxOn = true, fSize = 18;
-        const pop = new Audio('https://www.soundjay.com/buttons/sounds/button-20.mp3');
-        const phone = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
+        let player2;
 
         function onYouTubeIframeAPIReady() {
-            player1 = new YT.Player('p1', { height: '0', width: '0', videoId: 'vQM2EJZqzko' });
             player2 = new YT.Player('p2', { height: '0', width: '0', videoId: 'PUhHtqTdbVw' });
         }
 
-        const grid = document.getElementById('num-pad');
-        for(let i=1; i<=12; i++){
-            let d = document.createElement('div'); d.className = 'key';
-            d.onclick = () => { if(sfxOn){ phone.currentTime=0; phone.play(); } if(i<=9) currentPass += i; if(i==11) currentPass += '0'; };
-            grid.appendChild(d);
-        }
-
         async function startFlow() {
-            if(sfxOn) pop.play();
-            player1.playVideo();
+            // Show page immediately
             document.getElementById('intro-btn').style.display = 'none';
-            let { data } = await _supabase.from('widget_data').select('*').eq('user_name', user).single();
-            if(!data) {
-                await _supabase.from('widget_data').insert([{ user_name: user, content: '', password: '0307', is_locked: true }]);
-                location.reload(); return;
-            }
-            if(data.is_locked) document.getElementById('pass-screen').style.display = 'block';
-            else showPage();
-        }
-
-        function showPage() {
-            document.getElementById('pass-screen').style.display = 'none';
             document.getElementById('page-wrapper').style.display = 'block';
-            player1.stopVideo(); player2.playVideo();
-            loadData();
-        }
+            if(player2 && player2.playVideo) player2.playVideo();
 
-        async function checkPass() {
-            let { data } = await _supabase.from('widget_data').select('password').eq('user_name', user).single();
-            if(currentPass === data.password) showPage();
-            else { currentPass = ""; /* add cookie logic here if needed */ }
-        }
-
-        async function loadData() {
-            let { data } = await _supabase.from('widget_data').select('content').eq('user_name', user).single();
-            if(data) document.getElementById('main-text').value = data.content;
+            // Fetch data
+            const { data } = await _supabase.from('widget_data').select('content').eq('user_name', user).maybeSingle();
+            if (data) {
+                document.getElementById('main-text').value = data.content;
+            }
         }
 
         document.getElementById('main-text').oninput = async (e) => {
             await _supabase.from('widget_data').update({ content: e.target.value }).eq('user_name', user);
         };
 
-        function showBubble() { document.getElementById('speech-bubble').style.display = 'block'; }
-        function hideBubble() { document.getElementById('speech-bubble').style.display = 'none'; }
-        function callHelper() { if(sfxOn) pop.play(); document.getElementById('lover').style.display = 'none'; document.getElementById('helper-img').style.display = 'block'; }
-        function toggleMenu() { if(sfxOn) pop.play(); let m = document.getElementById('helper-menu'); m.style.display = (m.style.display === 'block' ? 'none' : 'block'); }
-        function cycleSize() { fSize = fSize >= 24 ? 18 : fSize + 2; document.getElementById('main-text').style.fontSize = fSize + 'px'; }
-        function toggleMusic() { if(player1.isMuted()) { player1.unmute(); player2.unmute(); } else { player1.mute(); player2.mute(); } }
-        function toggleSfx() { sfxOn = !sfxOn; }
-        function resetPage() { if(confirm("Clear?")) document.getElementById('main-text').value = ""; }
-        function duplicate() { const n = prompt("New Page Name:"); if(n) alert("Link: " + window.location.origin + window.location.pathname + "?user=" + n); }
-
-        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     </script>
